@@ -1,0 +1,72 @@
+FUNCTION is_valid_number(value)
+    RETURN value matches a valid numeric format
+END FUNCTION
+
+FUNCTION show_history(history)
+    IF history is empty THEN
+        DISPLAY "No calculations yet."
+    ELSE
+        DISPLAY each saved calculation
+    END IF
+END FUNCTION
+
+FUNCTION save_history(expression, result, history)
+    ADD expression and result to history
+END FUNCTION
+
+START
+    history = empty list
+    REPEAT
+        DISPLAY "1. Add   2. Subtract   3. Multiply   4. Divide"
+        DISPLAY "5. Power   6. Square Root   0. View History   7. Exit"
+        INPUT choice
+        IF choice = 7 THEN
+            DISPLAY "Goodbye!"
+        ELSE IF choice = 0 THEN
+            CALL show_history(history)
+        ELSE IF choice is between 1 and 6 THEN
+            INPUT first_number
+            IF NOT is_valid_number(first_number) THEN
+                DISPLAY "Invalid number"
+            END IF 
+            ELSE IF choice = 6 THEN
+                IF first_number < 0 THEN
+                    DISPLAY "Cannot find square root of a negative number"
+                ELSE
+                    result = square root of first_number
+                    DISPLAY result
+                    CALL save_history("sqrt(first_number)", result, history)
+                END IF
+            ELSE
+                INPUT second_number
+                IF NOT is_valid_number(second_number) THEN
+                    DISPLAY "Invalid number”
+                ELSE
+                    calculation_success = true
+                    IF choice = 1 THEN
+                        result = first_number + second_number
+                    ELSE IF choice = 2 THEN
+                        result = first_number - second_number
+                    ELSE IF choice = 3 THEN
+                        result = first_number * second_number
+                    ELSE IF choice = 4 THEN
+                        IF second_number = 0 THEN
+                            DISPLAY "Cannot divide by zero"
+                            calculation_success = false
+                        ELSE
+                            result = first_number / second_number
+                        END IF
+                    ELSE IF choice = 5 THEN
+                        result = first_number ^ second_number
+                    END IF
+                    IF calculation_success THEN
+                        DISPLAY result
+                        CALL save_history(expression, result, history)
+                    END IF
+                END IF
+            END IF
+        ELSE
+            DISPLAY "Invalid choice"
+        END IF
+    UNTIL choice = 7
+END
